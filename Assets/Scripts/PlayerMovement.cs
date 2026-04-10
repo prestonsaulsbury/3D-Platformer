@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
@@ -5,6 +6,9 @@ public class PlayerMovement : MonoBehaviour
     Rigidbody rb;
     [SerializeField] float movementSpeed = 5f;
     [SerializeField] float jumpForce = 5f;
+
+    [SerializeField] Transform groundcheck;
+    [SerializeField] LayerMask ground;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -20,9 +24,14 @@ public class PlayerMovement : MonoBehaviour
 
         rb.linearVelocity = new Vector3(horizontalInput * movementSpeed, rb.linearVelocity.y, verticalInput * movementSpeed);
 
-        if (Input.GetButtonDown("Jump"))
+        if (Input.GetButtonDown("Jump") && IsGrounded())
         {
             rb.linearVelocity = new Vector3(rb.linearVelocity.x, jumpForce, rb.linearVelocity.z);
         }
+    }
+
+    bool IsGrounded()
+    {
+        return Physics.CheckSphere(groundcheck.position, .1f, ground);
     }
 }
